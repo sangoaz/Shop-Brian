@@ -13,13 +13,9 @@ class Product(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
     name: str
     item: Item
-    size: Size
-    price: float
     description: str
-    stock: int
     is_featured: bool = Field(default=True)
     is_published: bool = Field(default=True)
-    is_expired: bool = Field(default=False)
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 

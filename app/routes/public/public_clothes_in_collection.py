@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, Query, HTTPException
 from sqlmodel import select, Session
 
 from app.core.database import get_session
-from app.models.clothes import Clothing
+from app.models.ProductVariant import Clothing
 from app.schemas.clothes import PublicClothingRead
 from app.utils.clothes import visible_clothing_statement
 

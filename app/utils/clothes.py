@@ -2,10 +2,10 @@ from fastapi import HTTPException
 from sqlmodel import Session, select
 
 from app.models.collections import Collection
-from app.models.clothes import Clothing
+from app.models.product import Product
 from app.utils.collections import get_collection_or_404
 
-def get_clothing_or_404(session: Session, collection_id: int, clothing_id: int) -> Clothing:
+def get_product_or_404(session: Session, collection_id: int, clothing_id: int) -> Clothing:
 
     # On vérifie d'abord si la collection existe
     existing_collection = get_collection_or_404(session, collection_id)

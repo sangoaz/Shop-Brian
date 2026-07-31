@@ -7,7 +7,7 @@ from typing import List
 
 from app.core.database import get_session
 from app.deps.auth import get_current_user, require_admin
-from app.models.clothes import Clothing
+from app.models.product import Clothing
 from app.models.user import User
 from app.schemas.clothes import(
     ClothingCreate,

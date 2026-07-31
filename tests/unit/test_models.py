@@ -16,7 +16,7 @@ from datetime import datetime, timezone
 import pytest
 
 from app.enums import Item, Size, UserRole
-from app.models.clothes import Clothing, ClothingImage
+from app.models.ProductVariant import Clothing, ClothingImage
 from app.models.collections import Collection, CollectionImage
 from app.models.user import User
 

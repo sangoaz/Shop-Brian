@@ -1,0 +1,27 @@
+from fastapi import APIRouter, Depends, Query
+from sqlmodel import select, Session
+
+from app.core.database import get_session
+from app.models.clothes import Clothing
+from app.schemas.clothes import PublicClothingRead
+from app.utils.clothes import visible_clothing_statement
+
+router = APIRouter(prefix="/clothes", tags=["Public Clothes"])
+
+
+# Liste de tous les vêtements
+@router.get("", response_model=list[PublicClothingRead])
+def list_public_clothes(
+    session: Session = Depends(get_session),
+    limit: int = Query(default=20, le=20),
+    offset: int = Query(default=0, ge=0),
+):
+    statement = (
+        visible_clothing_statement()
+        .order_by(Clothing.created_at.desc())
+        .offset(offset)
+        .limit(limit)
+    )
+
+    clothes = session.exec(statement).all()
+    return clothes

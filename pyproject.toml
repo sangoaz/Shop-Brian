@@ -1,0 +1,30 @@
+[tool.pytest.ini_options]
+# Ajoute la racine du projet à sys.path avant de collecter les tests.
+#
+# Sans ça, `pytest` (contrairement à `python -m pytest`) n'ajoute pas
+# automatiquement le dossier courant à sys.path : selon la façon dont
+# pytest est invoqué, `import app...` dans tests/conftest.py peut échouer
+# avec `ModuleNotFoundError: No module named 'app'`. Ce réglage rend le
+# comportement indépendant de la commande utilisée.
+pythonpath = ["."]
+
+# Permet de lancer `pytest` seul, sans préciser le dossier tests/.
+testpaths = ["tests"]
+
+# Déclare les marqueurs utilisés pour distinguer tests unitaires et tests
+# d'intégration (en plus du rangement dans tests/unit/ et
+# tests/integration/), afin de pouvoir filtrer avec `pytest -m unit` ou
+# `pytest -m integration` sans dépendre des chemins de fichiers.
+# `--strict-markers` ferait échouer un test qui utilise un marqueur non
+# déclaré ici : utile pour repérer une faute de frappe.
+markers = [
+    "unit: tests rapides, sans dépendance externe (DB en mémoire uniquement, pas de client HTTP).",
+    "integration: tests passant par le TestClient FastAPI (routes HTTP bout en bout).",
+]
+addopts = "--strict-markers"
+
+[tool.coverage.run]
+# Limite la mesure de couverture au code applicatif : évite que des
+# fichiers hors app/ (scripts, migrations Alembic, etc.) polluent le
+# rapport si jamais ils sont importés indirectement par les tests.
+source = ["app"]

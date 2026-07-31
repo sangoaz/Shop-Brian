@@ -1,0 +1,15 @@
+services:
+  db:
+    image: postgres:16
+    container_name: shop-brian-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: devpass
+      POSTGRES_DB: shop_brian
+    ports:
+      - "5432:5432"
+    volumes:
+      - shop_brian_data:/var/lib/postgresql/data
+
+volumes:
+  shop_brian_data:

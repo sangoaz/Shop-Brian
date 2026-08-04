@@ -1,12 +1,12 @@
 """ Routes relatives aux collections """
 
 from datetime import datetime, timezone
-from fastapi import APIRouter, Query, Depends, Form
+from fastapi import APIRouter, Query, Depends
 from sqlmodel import select, Session
 from typing import List
 
 from app.core.database import get_session
-from app.deps.auth import get_current_user, require_admin
+from app.deps.auth import require_admin
 from app.models.collections import Collection
 from app.models.user import User
 from app.schemas.collections import(

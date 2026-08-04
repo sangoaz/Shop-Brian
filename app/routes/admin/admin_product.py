@@ -10,18 +10,18 @@ from app.deps.auth import get_current_user, require_admin
 from app.models.product import Product
 from app.models.user import User
 from app.schemas.product import(
-    ClothingCreate,
-    ClothingRead,
-    ClothingUpdate,
+    ProductCreate,
+    ProductRead,
+    ProductUpdate,
 )
-from app.utils.clothes import get_clothing_or_404
+from app.utils.product import get_product_or_404
 from app.utils.collections import get_collection_or_404
 
 
-router = APIRouter(prefix="/admin", tags=["Clothes"])
+router = APIRouter(prefix="/admin", tags=["Products"])
 
 # ====================
-# Clothes
+# Product
 # ====================
 
 # Enregistrer un nouveau vetement

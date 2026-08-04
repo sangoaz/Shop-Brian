@@ -4,7 +4,7 @@ from sqlmodel import select, Session
 from app.core.database import get_session
 from app.models.product import Product
 from app.schemas.product import PublicClothingRead
-from app.utils.clothes import visible_clothing_statement
+from app.utils.product import visible_product_statement
 
 router = APIRouter(prefix="/clothes", tags=["Public Clothes"])
 
@@ -17,7 +17,7 @@ def list_public_clothes(
     offset: int = Query(default=0, ge=0),
 ):
     statement = (
-        visible_clothing_statement()
+        visible_product_statement()
         .order_by(Clothing.created_at.desc())
         .offset(offset)
         .limit(limit)

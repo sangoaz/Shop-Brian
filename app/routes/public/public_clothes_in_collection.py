@@ -6,7 +6,7 @@ from sqlmodel import select, Session
 from app.core.database import get_session
 from app.models.product import Product
 from app.schemas.product import PublicClothingRead
-from app.utils.clothes import visible_clothing_statement
+from app.utils.product import visible_product_statement
 
 router = APIRouter(prefix="/collections", tags=["Public Clothes in collection"])
 

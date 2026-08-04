@@ -42,7 +42,7 @@ from app.core.database import get_session
 from app.core.security import create_access_token, hash_password
 from app.enums import Item, Size, UserRole
 from app.main import app
-from app.models.ProductVariant import Clothing
+from app.models.product_variant import Clothing
 from app.models.collections import Collection
 from app.models.user import User
 

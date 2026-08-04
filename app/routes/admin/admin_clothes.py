@@ -7,9 +7,9 @@ from typing import List
 
 from app.core.database import get_session
 from app.deps.auth import get_current_user, require_admin
-from app.models.product import Clothing
+from app.models.product import Product
 from app.models.user import User
-from app.schemas.clothes import(
+from app.schemas.product import(
     ClothingCreate,
     ClothingRead,
     ClothingUpdate,
@@ -28,14 +28,14 @@ router = APIRouter(prefix="/admin", tags=["Clothes"])
 @router.post("/collections/{collection_id}/clothing", status_code=201, response_model=ClothingRead)
 def create_clothing(
     collection_id: int,
-    clothing: ClothingCreate,
+    product: ClothingCreate,
     session: Session = Depends(get_session),
     admin_user: User = Depends(require_admin),
 ):
     
     existing_collection = get_collection_or_404(session, collection_id)
 
-    new_clothing = Clothing(**clothing.model_dump(), collection_id=collection_id)
+    new_clothing = Product(**clothing.model_dump(), collection_id=collection_id)
 
     session.add(new_clothing)
     session.commit()

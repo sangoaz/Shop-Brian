@@ -14,6 +14,7 @@ class Product(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
     name: str
     item: Item
+    price: float
     description: str
     is_featured: bool = Field(default=True)
     is_published: bool = Field(default=True)

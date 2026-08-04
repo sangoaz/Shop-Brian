@@ -1,12 +1,12 @@
-""" Routes relatives aux vetements """
+""" Routes relatives aux produits """
 
 from datetime import datetime, timezone
-from fastapi import APIRouter, Query, Depends, Form
+from fastapi import APIRouter, Query, Depends
 from sqlmodel import select, Session
 from typing import List
 
 from app.core.database import get_session
-from app.deps.auth import get_current_user, require_admin
+from app.deps.auth import require_admin
 from app.models.product import Product
 from app.models.user import User
 from app.schemas.product import(
@@ -24,29 +24,29 @@ router = APIRouter(prefix="/admin", tags=["Products"])
 # Product
 # ====================
 
-# Enregistrer un nouveau vetement
-@router.post("/collections/{collection_id}/clothing", status_code=201, response_model=ClothingRead)
-def create_clothing(
+# Enregistrer un nouveau produit
+@router.post("/collections/{collection_id}/product", status_code=201, response_model=ProductRead)
+def create_product(
     collection_id: int,
-    product: ClothingCreate,
+    product: ProductCreate,
     session: Session = Depends(get_session),
     admin_user: User = Depends(require_admin),
 ):
     
     existing_collection = get_collection_or_404(session, collection_id)
 
-    new_clothing = Product(**clothing.model_dump(), collection_id=collection_id)
+    new_product = Product(**product.model_dump(), collection_id=collection_id)
 
-    session.add(new_clothing)
+    session.add(new_product)
     session.commit()
-    session.refresh(new_clothing)
+    session.refresh(new_product)
 
-    return new_clothing
+    return new_product
 
 
-# Liste des vetements
-@router.get("/collections/{collection_id}/clothes", response_model=List[ClothingRead])
-def list_clothes(
+# Liste des produits
+@router.get("/collections/{collection_id}/products", response_model=List[ProductRead])
+def list_products(
     collection_id: int,
     admin_user: User = Depends(require_admin),
     session: Session = Depends(get_session),
@@ -57,49 +57,49 @@ def list_clothes(
     existing_collection = get_collection_or_404(session, collection_id)
 
     statement = (
-        select(Clothing).order_by(Clothing.created_at.desc()).offset(offset).limit(limit).where(Clothing.collection_id == collection_id)
+        select(Product).order_by(Product.created_at.desc()).offset(offset).limit(limit).where(Product.collection_id == collection_id)
     )
 
-    clothing = session.exec(statement).all()
+    product = session.exec(statement).all()
 
-    return clothing
+    return product
 
 
-# Afficher un vetement
-@router.get("/collections/{collection_id}/clothing/{clothing_id}", response_model=ClothingRead)
-def get_cothing(
+# Afficher un produit
+@router.get("/collections/{collection_id}/product/{product_id}", response_model=ProductRead)
+def get_product(
     collection_id: int,
-    clothing_id: int,
+    product_id: int,
     admin_user: User = Depends(require_admin),
     session: Session = Depends(get_session),
 ):
     
-    clothing = get_clothing_or_404(session, collection_id, clothing_id)
+    product = get_product_or_404(session, collection_id, product_id)
 
-    return clothing
+    return product
 
 
-# Mise à jour d'un vetement
-@router.patch("/collections/{collection_id}/clothing/{clothing_id}", response_model=ClothingRead)
-def update_clothing(
+# Mise à jour d'un produit
+@router.patch("/collections/{collection_id}/product/{product_id}", response_model=ProductRead)
+def update_product(
     collection_id: int,
-    clothing_id: int,
-    clothing: ClothingUpdate,
+    product_id: int,
+    product: ProductUpdate,
     admin_user: User = Depends(require_admin),
     session: Session = Depends(get_session),
 ):
     
-    existing_clothing = get_clothing_or_404(session, collection_id, clothing_id)
+    existing_product = get_product_or_404(session, collection_id, product_id)
 
-    updated_data = clothing.model_dump(exclude_unset=True)
+    updated_data = product.model_dump(exclude_unset=True)
 
     for field, value in updated_data.items():
-        setattr(existing_clothing, field, value)
+        setattr(existing_product, field, value)
 
-    existing_clothing.updated_at = datetime.now(timezone.utc)
+    existing_product.updated_at = datetime.now(timezone.utc)
 
     session.commit()
-    session.refresh(existing_clothing)
+    session.refresh(existing_product)
 
-    return existing_clothing
+    return existing_product
 

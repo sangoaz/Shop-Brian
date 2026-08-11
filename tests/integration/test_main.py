@@ -36,10 +36,19 @@ def test_admin_collections_router_is_mounted(client):
     assert "/admin/collections/{collection_id}" in paths
 
 
-def test_admin_clothes_router_is_mounted(client):
+def test_admin_product_router_is_mounted(client):
     paths = client.get("/openapi.json").json()["paths"]
-    assert "/admin/collections/{collection_id}/clothing" in paths
-    assert "/admin/collections/{collection_id}/clothing/{clothing_id}" in paths
+    assert "/admin/collections/{collection_id}/products" in paths
+    assert "/admin/collections/{collection_id}/products/{product_id}" in paths
+
+
+def test_admin_product_variant_router_is_mounted(client):
+    paths = client.get("/openapi.json").json()["paths"]
+    assert "/admin/collections/{collection_id}/products/{product_id}/variants" in paths
+    assert (
+        "/admin/collections/{collection_id}/products/{product_id}/variants/{variant_id}"
+        in paths
+    )
 
 
 def test_public_collections_router_is_mounted(client):
@@ -48,12 +57,7 @@ def test_public_collections_router_is_mounted(client):
     assert "/collections/{collection_id}" in paths
 
 
-def test_public_clothes_router_is_mounted(client):
+def test_public_product_router_is_mounted(client):
     paths = client.get("/openapi.json").json()["paths"]
-    assert "/clothes" in paths
-
-
-def test_public_clothes_in_collection_router_is_mounted(client):
-    paths = client.get("/openapi.json").json()["paths"]
-    assert "/collections/{collection_id}/clothes" in paths
-    assert "/collections/{collection_id}/clothing/{clothing_id}" in paths
+    assert "/products" in paths
+    assert "/products/{product_id}" in paths

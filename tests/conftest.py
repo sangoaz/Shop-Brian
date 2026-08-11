@@ -14,8 +14,8 @@ Ce module centralise :
 - un `TestClient` FastAPI dont la dépendance `get_session` est remplacée par
   la session de test, pour ne jamais toucher à la vraie base ;
 - des "factories" légères qui créent et persistent un objet valide (User,
-  Collection, Clothing) en un appel, avec des valeurs par défaut réalistes
-  surchargeables via `**kwargs`.
+  Collection, Product, ProductVariant) en un appel, avec des valeurs par
+  défaut réalistes surchargeables via `**kwargs`.
 """
 
 from __future__ import annotations
@@ -25,6 +25,7 @@ import os
 os.environ.setdefault("DATABASE_URL", "sqlite://")
 os.environ.setdefault("SECRET_KEY", "test-secret-key-do-not-use-in-production")
 
+import uuid
 from datetime import datetime, timezone
 from typing import Callable
 
@@ -42,7 +43,8 @@ from app.core.database import get_session
 from app.core.security import create_access_token, hash_password
 from app.enums import Item, Size, UserRole
 from app.main import app
-from app.models.clothes import Clothing
+from app.models.product import Product
+from app.models.product_variant import ProductVariant
 from app.models.collections import Collection
 from app.models.user import User
 
@@ -151,26 +153,61 @@ def collection_factory(session: Session) -> Callable[..., Collection]:
 
 
 @pytest.fixture
-def clothing_factory(session: Session) -> Callable[..., Clothing]:
-    """Retourne une fonction créant un `Clothing` de test rattaché à une collection."""
+def product_factory(session: Session) -> Callable[..., Product]:
+    """
+    Retourne une fonction créant un `Product` de test rattaché à une
+    collection.
 
-    def _make_clothing(collection_id: int, **overrides) -> Clothing:
+    Depuis le passage à Product/ProductVariant, `Product` ne porte plus ni
+    taille ni stock (voir `variant_factory` ci-dessous pour ça) : il ne
+    décrit que les informations communes à toutes les variantes (nom,
+    catégorie, prix de base, description).
+    """
+
+    def _make_product(collection_id: int, **overrides) -> Product:
         defaults = {
             "name": "T-shirt basique",
             "item": Item.T_SHIRT,
-            "size": Size.M,
             "price": 19.99,
             "description": "Un t-shirt en coton bio",
-            "stock": 10,
         }
         defaults.update(overrides)
-        clothing = Clothing(collection_id=collection_id, **defaults)
-        session.add(clothing)
+        product = Product(collection_id=collection_id, **defaults)
+        session.add(product)
         session.commit()
-        session.refresh(clothing)
-        return clothing
+        session.refresh(product)
+        return product
 
-    return _make_clothing
+    return _make_product
+
+
+@pytest.fixture
+def variant_factory(session: Session) -> Callable[..., ProductVariant]:
+    """
+    Retourne une fonction créant une `ProductVariant` de test rattachée à un
+    produit.
+
+    `sku` a une contrainte `unique=True` en base : la valeur par défaut
+    intègre un suffixe aléatoire pour que deux appels de la factory sans
+    argument ne se percutent jamais, même au sein du même test.
+    """
+
+    def _make_variant(product_id: int, **overrides) -> ProductVariant:
+        defaults = {
+            "size": Size.M,
+            "stock": 10,
+            "price_override": None,
+            "sku": f"SKU-{uuid.uuid4().hex[:8]}",
+            "is_expired": False,
+        }
+        defaults.update(overrides)
+        variant = ProductVariant(product_id=product_id, **defaults)
+        session.add(variant)
+        session.commit()
+        session.refresh(variant)
+        return variant
+
+    return _make_variant
 
 
 @pytest.fixture

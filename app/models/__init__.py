@@ -2,7 +2,7 @@
 Ce fichier force l'import RÉEL de tous les modèles SQLModel.
 
 Pourquoi c'est nécessaire :
-Certains modèles se référencent mutuellement (ex: Clothing <-> Collection).
+Certains modèles se référencent mutuellement (ex: Product <-> Collection).
 Pour éviter un import circulaire, ces références croisées sont déclarées
 uniquement sous `TYPE_CHECKING` dans chaque fichier de modèle -- ce qui
 veut dire qu'elles ne sont JAMAIS exécutées par Python normalement,
@@ -20,5 +20,5 @@ registre SQLModel.metadata soit toujours complet.
 
 from app.models.user import User
 from app.models.collections import Collection, CollectionImage
-from app.models.clothes import Clothing, ClothingImage
-
+from app.models.product import Product, ProductImage
+from app.models.product_variant import ProductVariant

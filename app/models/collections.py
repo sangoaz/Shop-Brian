@@ -5,7 +5,7 @@ from datetime import datetime, timezone
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from app.models.clothes import Clothing
+    from app.models.product import Product
 
 class Collection(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
@@ -16,7 +16,7 @@ class Collection(SQLModel, table=True):
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
-    clothes: list["Clothing"] = Relationship(back_populates="collection")
+    products: list["Product"] = Relationship(back_populates="collection")
     images: list["CollectionImage"] = Relationship(back_populates="collection")
 
 class CollectionImage(SQLModel, table=True):

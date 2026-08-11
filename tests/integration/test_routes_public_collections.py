@@ -16,7 +16,7 @@ pytestmark = pytest.mark.integration
 
 
 def test_list_public_collections_does_not_require_authentication(client):
-    response = client.get("/collections/")
+    response = client.get("/collections")
 
     assert response.status_code == 200
 
@@ -25,7 +25,7 @@ def test_list_public_collections_only_returns_published(client, collection_facto
     collection_factory(name="Visible", is_published=True)
     collection_factory(name="Brouillon", is_published=False)
 
-    response = client.get("/collections/")
+    response = client.get("/collections")
 
     names = [item["name"] for item in response.json()]
     assert names == ["Visible"]
@@ -35,14 +35,14 @@ def test_list_public_collections_orders_by_created_at_desc(client, collection_fa
     collection_factory(name="Ancienne", created_at=datetime.now(timezone.utc) - timedelta(days=1))
     collection_factory(name="Récente", created_at=datetime.now(timezone.utc))
 
-    response = client.get("/collections/")
+    response = client.get("/collections")
 
     names = [item["name"] for item in response.json()]
     assert names == ["Récente", "Ancienne"]
 
 
 def test_list_public_collections_limit_is_capped_at_20(client):
-    response = client.get("/collections/?limit=21")
+    response = client.get("/collections?limit=21")
 
     assert response.status_code == 422
 

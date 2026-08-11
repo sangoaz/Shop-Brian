@@ -25,7 +25,7 @@ router = APIRouter(prefix="/admin", tags=["Products"])
 # ====================
 
 # Enregistrer un nouveau produit
-@router.post("/collections/{collection_id}/product", status_code=201, response_model=ProductRead)
+@router.post("/collections/{collection_id}/products", status_code=201, response_model=ProductRead)
 def create_product(
     collection_id: int,
     product: ProductCreate,
@@ -66,7 +66,7 @@ def list_products(
 
 
 # Afficher un produit
-@router.get("/collections/{collection_id}/product/{product_id}", response_model=ProductRead)
+@router.get("/collections/{collection_id}/products/{product_id}", response_model=ProductRead)
 def get_product(
     collection_id: int,
     product_id: int,
@@ -80,7 +80,7 @@ def get_product(
 
 
 # Mise à jour d'un produit
-@router.patch("/collections/{collection_id}/product/{product_id}", response_model=ProductRead)
+@router.patch("/collections/{collection_id}/products/{product_id}", response_model=ProductRead)
 def update_product(
     collection_id: int,
     product_id: int,

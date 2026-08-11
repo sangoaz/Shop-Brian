@@ -12,7 +12,7 @@ router = APIRouter(prefix="/products", tags=["Public Products"])
 # Liste de tous les produits
 @router.get("", response_model=list[PublicProductRead])
 def list_public_products(
-    collection_id: int = None | None,
+    collection_id: int | None = None,
     session: Session = Depends(get_session),
     limit: int = Query(default=20, le=20),
     offset: int = Query(default=0, ge=0),

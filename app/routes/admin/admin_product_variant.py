@@ -26,7 +26,7 @@ router = APIRouter(prefix="/admin", tags=["Variants"])
 # ====================
 
 # Enregister une nouvelle variation
-@router.post("/collections/{collection_id}/product/{product_id}/variant", status_code=201, response_model=VariantRead)
+@router.post("/collections/{collection_id}/products/{product_id}/variants", status_code=201, response_model=VariantRead)
 def create_variant(
     collection_id: int,
     product_id: int,
@@ -46,7 +46,7 @@ def create_variant(
     return new_variant
 
 # Liste des variations d'un produit
-@router.get("/collections/{collection_id}/product/{product_id}/variants", response_model=List[VariantRead])
+@router.get("/collections/{collection_id}/products/{product_id}/variants", response_model=List[VariantRead])
 def list_variant(
     collection_id: int,
     product_id: int,
@@ -71,7 +71,7 @@ def list_variant(
     return variant
 
 # Afficher une variation
-@router.get("/collections/{collection_id}/product/{product_id}/variant/{variant_id}", response_model=VariantRead)
+@router.get("/collections/{collection_id}/products/{product_id}/variants/{variant_id}", response_model=VariantRead)
 def get_variant(
     collection_id: int,
     product_id: int,
@@ -86,7 +86,7 @@ def get_variant(
 
 
 # Mise à jour d'une variation
-@router.patch("/collections/{collection_id}/product/{product_id}/variant/{variant_id}", response_model=VariantRead)
+@router.patch("/collections/{collection_id}/products/{product_id}/variants/{variant_id}", response_model=VariantRead)
 def update_variant(
     collection_id: int,
     product_id: int,

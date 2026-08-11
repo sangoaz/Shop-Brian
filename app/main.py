@@ -10,7 +10,6 @@ from app.routes.auth import router as auth_router
 from app.routes.admin.admin_product import router as admin_product_router
 from app.routes.admin.admin_product_variant import router as admin_product_variant_router
 from app.routes.public.public_product import router as public_product_router
-from app.routes.public.public_products_in_collection import router as public_product_in_collection
 from app.routes.public.public_collections import router as public_collections_router
 
 @asynccontextmanager
@@ -48,5 +47,5 @@ app.include_router(auth_router)
 # Routes publiques
 app.include_router(public_collections_router)
 app.include_router(public_product_router)
-app.include_router(public_product_in_collection)
+
 

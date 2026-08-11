@@ -1,5 +1,6 @@
 from fastapi import HTTPException
 from sqlmodel import Session, select
+from sqlalchemy.orm import selectinload
 
 from app.models.collections import Collection
 from app.models.product import Product
@@ -23,13 +24,15 @@ def get_product_or_404(session: Session, collection_id: int, product_id: int) ->
     return product
 
 def visible_product_statement():
-
     return (
         select(Product)
+        .options(selectinload(Product.variants))
         .join(Collection, Product.collection_id == Collection.id)
         .where(
             Product.is_published == True,
             Collection.is_published == True,
         )
     )
+
+
 

@@ -73,5 +73,38 @@ def list_variant(
 # Afficher une variation
 @router.get("/collections/{collection_id}/product/{product_id}/variant/{variant_id}", response_model=VariantRead)
 def get_variant(
+    collection_id: int,
+    product_id: int,
+    variant_id: int,
+    admin_user: User = Depends(require_admin),
+    session: Session = Depends(get_session),
+):
     
-)
+    variant = get_variant_or_404(session, collection_id, product_id, variant_id)
+
+    return variant
+
+
+# Mise à jour d'une variation
+@router.patch("/collections/{collection_id}/product/{product_id}/variant/{variant_id}", response_model=VariantRead)
+def update_variant(
+    collection_id: int,
+    product_id: int,
+    variant_id: int,
+    variant: VariantUpdate,
+    admin_user: User = Depends(require_admin),
+    session: Session = Depends(get_session),
+):
+    existing_variant = get_variant_or_404(session, collection_id, product_id, variant_id)
+
+    updated_data = variant.model_dump(exclude_unset=True)
+
+    for field, value in updated_data.items():
+        setattr(existing_variant, field, value)
+
+    existing_variant.updated_at = datetime.now(timezone.utc)
+
+    session.commit()
+    session.refresh(existing_variant)
+
+    return existing_variant

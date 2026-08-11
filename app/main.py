@@ -5,12 +5,12 @@ from contextlib import asynccontextmanager
 from app.core.database import engine
 from app import models
 
-#from app.routes.clothes import router as clothes_router
 from app.routes.admin.admin_collections import router as admin_collections_router
 from app.routes.auth import router as auth_router
 from app.routes.admin.admin_product import router as admin_product_router
-from app.routes.public.public_clothes import router as public_clothes_router
-from app.routes.public.public_clothes_in_collection import router as public_clothes_in_collection
+from app.routes.admin.admin_product_variant import router as admin_product_variant_router
+from app.routes.public.public_product import router as public_product_router
+from app.routes.public.public_products_in_collection import router as public_product_in_collection
 from app.routes.public.public_collections import router as public_collections_router
 
 @asynccontextmanager
@@ -37,11 +37,16 @@ app.add_middleware(
 """
 
 # Branchement des différentes routes du dossier routes
-#app.include_router(clothes_router)
+# Routes admin
 app.include_router(admin_collections_router)
 app.include_router(admin_product_router)
+app.include_router(admin_product_variant_router)
+
+# Routes d'utilisateur
 app.include_router(auth_router)
+
+# Routes publiques
 app.include_router(public_collections_router)
-app.include_router(public_clothes_router)
-app.include_router(public_clothes_in_collection)
+app.include_router(public_product_router)
+app.include_router(public_product_in_collection)
 

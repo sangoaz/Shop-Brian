@@ -1,3 +1,5 @@
+""" Routes relatives aux produits """
+
 from fastapi import APIRouter, Depends, Query, HTTPException
 from sqlmodel import select, Session
 

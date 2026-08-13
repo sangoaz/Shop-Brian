@@ -2,9 +2,12 @@
 
 from sqlmodel import SQLModel, Field, Relationship
 from datetime import datetime, timezone
+from typing import TYPE_CHECKING
 
 from app.enums import UserRole
 
+if TYPE_CHECKING:
+    from app.models.address import Address
 
 class User(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
@@ -23,3 +26,5 @@ class User(SQLModel, table=True):
     verification_token_expires_at: datetime | None = None
 
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+    addresses: list["Address"] = Relationship(back_populates="user")

@@ -22,3 +22,4 @@ from app.models.user import User
 from app.models.collections import Collection, CollectionImage
 from app.models.product import Product, ProductImage
 from app.models.product_variant import ProductVariant
+from app.models.address import Address

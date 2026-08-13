@@ -4,6 +4,7 @@ from enum import Enum
 
 class UserRole(str, Enum):
     ADMIN = "ADMIN"
+    CUSTOMER = "CUSTOMER"
 
 class Item(str, Enum):
     T_SHIRT = "T_SHIRT"

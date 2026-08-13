@@ -1,5 +1,7 @@
 from datetime import datetime, timedelta, timezone
 
+import hashlib
+import secrets
 from passlib.context import CryptContext
 from jose import jwt, JWTError
 
@@ -52,3 +54,13 @@ def decode_access_token(token: str) -> dict | None:
         return payload
     except JWTError:
         return None
+    
+
+def generate_reset_token() -> str:
+    """Token en clair, à envoyer par email — jamais stocké tel quel."""
+    return secrets.token_urlsafe(32)
+
+
+def hash_reset_token(token: str) -> str:
+    """Hash rapide (SHA-256) pour stocker/chercher le token en base."""
+    return hashlib.sha256(token.encode()).hexdigest()

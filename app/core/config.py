@@ -3,7 +3,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
     app_name: str = "BRIAN SHOP API"
-    debug: bool = False
+    debug: bool = True
 
     database_url: str
     secret_key: str

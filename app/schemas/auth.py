@@ -8,7 +8,6 @@ from app.enums import UserRole
 class UserCreate(BaseModel):
     email: EmailStr
     password: str = Field(min_length=8)
-    role: UserRole
 
 
 class UserRead(BaseModel):
@@ -26,3 +25,12 @@ class UserUpdate(BaseModel):
     password: str | None = Field(default=None, min_length=8)
     role: UserRole | None = None
     is_active: bool | None = None
+
+
+class PasswordResetRequest(BaseModel):
+    email: EmailStr
+
+
+class PasswordResetConfirm(BaseModel):
+    token: str
+    new_password: str = Field(min_length=8)

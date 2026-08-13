@@ -56,11 +56,12 @@ def decode_access_token(token: str) -> dict | None:
         return None
     
 
-def generate_reset_token() -> str:
-    """Token en clair, à envoyer par email — jamais stocké tel quel."""
+def generate_token() -> str:
+    """Token en clair (256 bits), à envoyer par email — jamais stocké tel quel.
+    Réutilisé pour le reset de mot de passe et la vérification d'email."""
     return secrets.token_urlsafe(32)
 
 
-def hash_reset_token(token: str) -> str:
-    """Hash rapide (SHA-256) pour stocker/chercher le token en base."""
+def hash_token(token: str) -> str:
+    """Hash rapide (SHA-256) pour stocker/chercher un token en base."""
     return hashlib.sha256(token.encode()).hexdigest()

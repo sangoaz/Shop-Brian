@@ -15,6 +15,7 @@ class UserRead(BaseModel):
     email: EmailStr
     role: UserRole
     is_active: bool
+    email_verified: bool
     created_at: datetime
 
     model_config = ConfigDict(from_attributes=True)

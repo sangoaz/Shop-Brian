@@ -18,4 +18,8 @@ class User(SQLModel, table=True):
     reset_token_hash: str | None = Field(default=None, index=True)
     reset_token_expires_at: datetime | None = None
 
+    email_verified: bool = Field(default=False)
+    verification_token_hash: str | None = Field(default=None, index=True)
+    verification_token_expires_at: datetime | None = None
+
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
